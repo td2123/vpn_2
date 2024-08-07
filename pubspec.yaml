@@ -1,0 +1,165 @@
+# By Harsh H. Rajpurohit
+name: vpn_basic_project
+description: Flutter Android VPN based on OpenVPN Library.
+publish_to: 'none'
+
+# App Version
+version: 1.0.2+2
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+
+# App dependencies
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  csv: ^6.0.0
+  lottie: ^3.1.2
+  hive_flutter: ^1.1.0
+  firebase_core: ^3.3.0
+  firebase_remote_config: ^5.0.4
+  sizer: ^2.0.15
+  flutter_svg: ^2.0.10+1
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^3.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  fonts:
+    - family: Gilroy
+      fonts:
+        - asset: font/gilroy/FontsFree-Net-Gilroy-Light.ttf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Black.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-BlackItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Bold.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-BoldItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-ExtraBold.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-ExtraBoldItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Heavy.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-HeavyItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Light.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-LightItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Medium.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-MediumItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Regular.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-RegularItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-SemiBold.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-SemiBoldItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-Thin.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-ThinItalic.otf
+        - asset: font/gilroy/Radomir Tinkov - Gilroy-UltraLight.otf
+    - family: sulphur
+      fonts:
+        - asset: font/sulphur/SulphurPoint-Bold.ttf
+        - asset: font/sulphur/SulphurPoint-Light.ttf
+        - asset: font/sulphur/SulphurPoint-Regular.ttf
+    - family: Gasalt
+      fonts:
+        - asset: font/gasalt/Gasalt-Black.ttf
+        - asset: font/gasalt/Gasalt-Regular.ttf
+        - asset: font/gasalt/Gasalt-Thin.ttf
+    - family: rowdies
+      fonts:
+        - asset: font/rowdies/Rowdies-Bold.ttf
+        - asset: font/rowdies/Rowdies-Light.ttf
+        - asset: font/rowdies/Rowdies-Regular.ttf
+    - family: neuropol
+      fonts:
+        - asset: font/neuropol/neuropol x rg.otf
+    - family: nunito
+      fonts:
+        - asset: font/nunito/Nunito-Black.ttf
+        - asset: font/nunito/Nunito-BlackItalic.ttf
+        - asset: font/nunito/Nunito-Bold.ttf
+        - asset: font/nunito/Nunito-BoldItalic.ttf
+        - asset: font/nunito/Nunito-ExtraBold.ttf
+        - asset: font/nunito/Nunito-ExtraBoldItalic.ttf
+        - asset: font/nunito/Nunito-ExtraLight.ttf
+        - asset: font/nunito/Nunito-ExtraLightItalic.ttf
+        - asset: font/nunito/Nunito-Italic.ttf
+        - asset: font/nunito/Nunito-Light.ttf
+        - asset: font/nunito/Nunito-LightItalic.ttf
+        - asset: font/nunito/Nunito-Medium.ttf
+        - asset: font/nunito/Nunito-MediumItalic.ttf
+        - asset: font/nunito/Nunito-Regular.ttf
+        - asset: font/nunito/Nunito-SemiBold.ttf
+        - asset: font/nunito/Nunito-SemiBoldItalic.ttf
+    - family: exo
+      fonts:
+        - asset: font/exo/Exo2-Black.ttf
+        - asset: font/exo/Exo2-BlackItalic.ttf
+        - asset: font/exo/Exo2-Bold.ttf
+        - asset: font/exo/Exo2-BoldItalic.ttf
+        - asset: font/exo/Exo2-ExtraBold.ttf
+        - asset: font/exo/Exo2-ExtraBoldItalic.ttf
+        - asset: font/exo/Exo2-ExtraLight.ttf
+        - asset: font/exo/Exo2-ExtraLightItalic.ttf
+        - asset: font/exo/Exo2-Italic.ttf
+        - asset: font/exo/Exo2-Light.ttf
+        - asset: font/exo/Exo2-LightItalic.ttf
+        - asset: font/exo/Exo2-Medium.ttf
+        - asset: font/exo/Exo2-MediumItalic.ttf
+        - asset: font/exo/Exo2-Regular.ttf
+        - asset: font/exo/Exo2-SemiBold.ttf
+        - asset: font/exo/Exo2-SemiBoldItalic.ttf
+        - asset: font/exo/Exo2-Thin.ttf
+        - asset: font/exo/Exo2-ThinItalic.ttf
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/
+    - assets/vpn/
+    - assets/icons/
+    - assets/lottie/
+    - assets/flags/
+    - assets/map/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
