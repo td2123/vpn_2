@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/routes/app_routes.dart';
+import '../../../ad_loader/ad_loader_mediation.dart';
 import '../../../models/vpn_status.dart';
 import '../../../utils/color.dart';
 import '../../../utils/font.dart';
+import '../../../utils/utils.dart';
 import '../../../vpn_service/vpn_service_engine.dart';
 import '../controller/home_controller.dart';
 
@@ -16,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 final _controller = Get.put(HomeController());
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
@@ -24,43 +30,172 @@ class _HomeScreenState extends State<HomeScreen> {
       _controller.vpnState.value = event;
     });
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: CColor.white12,
-      // appBar: _header(),
+      drawer: _drawer(),
+      appBar: AppBar(
+        toolbarHeight: 7,
+        backgroundColor: CColor.white12,
+        systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: CColor.white12,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: CColor.white12,
+            systemNavigationBarIconBrightness: Brightness.dark),
+      ),
       body: GetBuilder<HomeController>(builder: (logic) {
-        return Column(
-          children: [const SizedBox(height: 40), _mapView(logic)],
-        );
+        return _mapView(logic, context);
       }),
     );
   }
 
-  _header() {
+  _header(BuildContext context) {
     return Container(
       height: 60,
+      padding: EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.center,
       width: Get.width,
-      child: Text(
-        "VPN",
-        style: TextStyle(
-            color: Colors.black, fontFamily: Font.nunito, fontSize: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+              onTap: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              child:
+                  SvgPicture.asset("assets/icons/drawer_menu.svg", height: 45)),
+          Text(
+            "VPN",
+            style: TextStyle(
+                color: Colors.black, fontFamily: Font.nunito, fontSize: 20),
+          ),
+          InkWell(
+            onTap: () {
+              Get.toNamed(AppRoutes.info);
+            },
+            child: SvgPicture.asset("assets/icons/info.svg", height: 40),
+          ),
+        ],
       ),
     );
   }
 
-  _mapView(HomeController logic) {
+  _drawer() {
+    return GetBuilder<HomeController>(builder: (logic) {
+      return Drawer(
+        backgroundColor: CColor.white12,
+        shape: BeveledRectangleBorder(),
+        child: Stack(
+          children: [
+            SvgPicture.asset("assets/map/world-map.svg",
+                color: CColor.viewGray),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 120),
+                Align(
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/icons/logo.png", height: 70)),
+                SizedBox(height: 120),
+                Divider(
+                  thickness: 1,
+                  endIndent: 10,
+                  indent: 10,
+                  color: CColor.gray,
+                ),
+                SizedBox(height: 5),
+                ListTile(
+                  leading: SvgPicture.asset("assets/icons/shield-tick.svg"),
+                  title: Text('Terms',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.nunito,
+                          color: CColor.black,
+                          fontWeight: FontWeight.w500)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.webview, arguments: [""]);
+                  },
+                ),
+                SizedBox(height: 5),
+                ListTile(
+                  leading: SvgPicture.asset("assets/icons/security-safe.svg"),
+                  title: Text('Privacy',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.nunito,
+                          color: CColor.black,
+                          fontWeight: FontWeight.w500)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.webview, arguments: [""]);
+                  },
+                ),
+                SizedBox(height: 5),
+                ListTile(
+                  leading: SvgPicture.asset("assets/icons/share.svg"),
+                  title: Text('Share',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.nunito,
+                          color: CColor.black,
+                          fontWeight: FontWeight.w500)),
+                  onTap: () {
+                    var appId = logic.appPackageName;
+                    var shareUrl =
+                        "https://play.google.com/store/apps/details?id=$appId";
+                    Share.share(shareUrl);
+                  },
+                ),
+                SizedBox(height: 5),
+                ListTile(
+                  leading: SvgPicture.asset("assets/icons/star.svg"),
+                  title: Text('Rate Us',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: Font.nunito,
+                          color: CColor.black,
+                          fontWeight: FontWeight.w500)),
+                  onTap: () {
+                    var appId = logic.appPackageName;
+                    final url = Uri.parse(
+                      "https://play.google.com/store/apps/details?id=$appId",
+                    );
+                    launchUrl(
+                      url,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
+                ),
+                Spacer(),
+                Text('Version ${logic.appVersion}',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: Font.nunito,
+                        color: CColor.gray,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(height: 30),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  _mapView(HomeController logic, BuildContext context) {
     return Stack(
       children: [
         SvgPicture.asset("assets/map/world-map.svg", color: CColor.viewGray),
-        _centerView(logic)
+        _centerView(logic, context),
       ],
     );
   }
 
-  _centerView(HomeController logic) {
+  _centerView(HomeController logic, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _header(),
+        _header(context),
         const SizedBox(height: 60),
         Obx(
           () => Align(
@@ -86,6 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _selectServer(HomeController logic) {
     return InkWell(
+      splashColor: CColor.transparent,
+      highlightColor: CColor.transparent,
       onTap: () {
         Get.toNamed(AppRoutes.country)!.then((v) {
           setState(() {});
@@ -109,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: CColor.viewGray,
                   borderRadius: BorderRadius.circular(13)),
               child: logic.vpn.value.countryLong.isEmpty
-                  ? SvgPicture.asset("assets/icons/language.svg")
+                  ? SvgPicture.asset("assets/icons/globe-2.svg")
                   : Image.asset(
                       'assets/flags/${logic.vpn.value.countryShort.toLowerCase()}.png'),
             ),
@@ -138,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
         initialData: VpnStatus(),
         stream: VpnEngine.vpnStatusSnapshot(),
         builder: (context, snapshot) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -153,7 +290,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 13),
                       ),
                       Text(
-                        snapshot.data?.byteIn ?? '0.0 kbps',
+                        snapshot.data?.byteIn != ""
+                            ? snapshot.data?.byteIn ?? "0.0 kbps"
+                            : '0.0 kbps',
                         style: TextStyle(
                             color: CColor.gray,
                             fontFamily: Font.nunito,
@@ -161,13 +300,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 5),
                   Container(
                     height: 35,
                     width: 1,
                     color: CColor.gray,
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 5),
                   Column(
                     children: [
                       Text(
@@ -178,7 +317,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 13),
                       ),
                       Text(
-                        snapshot.data?.byteOut ?? '0.0 kbps',
+                        snapshot.data?.byteOut != ""
+                            ? snapshot.data?.byteOut ?? "0.0 kbps"
+                            : '0.0 kbps',
                         style: TextStyle(
                             color: CColor.gray,
                             fontFamily: Font.nunito,
