@@ -5,11 +5,10 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vpn_basic_project/routes/app_routes.dart';
-import '../../../ad_loader/ad_loader_mediation.dart';
 import '../../../models/vpn_status.dart';
 import '../../../utils/color.dart';
+import '../../../utils/debugs.dart';
 import '../../../utils/font.dart';
-import '../../../utils/utils.dart';
 import '../../../vpn_service/vpn_service_engine.dart';
 import '../controller/home_controller.dart';
 
@@ -94,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 120),
                 Align(
                     alignment: Alignment.center,
-                    child: Image.asset("assets/icons/logo.png", height: 70)),
-                SizedBox(height: 120),
+                    child: Image.asset("assets/icons/vpn_logo.png", height: 100)),
+                SizedBox(height: 90),
                 Divider(
                   thickness: 1,
                   endIndent: 10,
@@ -113,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w500)),
                   onTap: () {
                     Navigator.pop(context);
-                    Get.toNamed(AppRoutes.webview, arguments: [""]);
+                    Get.toNamed(AppRoutes.webview, arguments: [Debug.termsCondition]);
                   },
                 ),
                 SizedBox(height: 5),
@@ -127,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w500)),
                   onTap: () {
                     Navigator.pop(context);
-                    Get.toNamed(AppRoutes.webview, arguments: [""]);
+                    Get.toNamed(AppRoutes.webview, arguments: [Debug.privacyPolicy]);
                   },
                 ),
                 SizedBox(height: 5),
@@ -196,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _header(context),
-        const SizedBox(height: 60),
+        const SizedBox(height: 55),
         Obx(
           () => Align(
             alignment: Alignment.center,
@@ -211,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+        const SizedBox(height: 25),
         _selectServer(logic),
         _downloadAndUploadSpeed(logic),
         SizedBox(height: Get.height * 0.15),

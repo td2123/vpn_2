@@ -23,11 +23,16 @@ class HomeController extends GetxController {
 
   void connectToVpn() async {
     if (vpn.value.openVPNConfigDataBase64.isEmpty) {
+      Get.snackbar(
+          'Info', 'Select a Location by clicking \'Select Country Server\'',
+          colorText: Colors.black,
+          barBlur: 15,
+          backgroundColor: Colors.black12);
       return;
     }
 
     if (vpnState.value == VpnEngine.vpnDisconnected) {
-      if (Debug.isShowAd && Debug.isShowInter) {
+      if (Debug.isShowAd && Debug.isShowInter && Debug.isInterConnectVPN) {
         if (Debug.isPreloading) {
           AdLoaderMediation.interMediation(() async {
             final data = const Base64Decoder()

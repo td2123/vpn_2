@@ -48,7 +48,7 @@ class Ads {
   static NativeAd? loadNativeAd({required NativeAdController adController}) {
     log('Native Ad Id: ${AdHelper.nativeAdUnitId}');
 
-    if (Debug.isShowAd) return null;
+    if (!Debug.isShowAd) return null;
 
     if (_nativeAdLoaded && _nativeAd != null) {
       adController.adLoaded.value = true;
@@ -57,6 +57,7 @@ class Ads {
 
     return NativeAd(
         adUnitId: AdHelper.nativeAdUnitId,
+        request: const AdRequest(),
         listener: NativeAdListener(
           onAdLoaded: (ad) {
             log('$NativeAd loaded.');
@@ -69,8 +70,6 @@ class Ads {
             log('$NativeAd failed to load: $error');
           },
         ),
-        request: const AdRequest(),
-        // Styling
         nativeTemplateStyle:
             NativeTemplateStyle(templateType: TemplateType.small))
       ..load();

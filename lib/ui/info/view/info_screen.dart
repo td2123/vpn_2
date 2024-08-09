@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:vpn_basic_project/utils/debugs.dart';
 import '../../../ad/ads.dart';
 import '../../../ad/native_ad_controller.dart';
 import '../../../models/ip_details.dart';
@@ -22,15 +23,25 @@ class _InfoScreenState extends State<InfoScreen> {
   final _adController = NativeAdController();
 
   @override
+  void initState() {
+    if(Debug.isShowAd  && Debug.isShowBanner&& Debug.isShowBannerInfo) {
+      _adController.ad = Ads.loadNativeAd(adController: _adController);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ipData = IPDetails.fromJson({}).obs;
     Repo.getIPDetails(ipData: ipData);
-    _adController.ad = Ads.loadNativeAd(adController: _adController);
     return Obx(
           () => Scaffold(
         backgroundColor: CColor.white12,
         bottomNavigationBar: _adController.ad != null &&
-                _adController.adLoaded.isTrue
+                _adController.adLoaded.isTrue &&
+                Debug.isShowAd &&
+                Debug.isShowBanner &&
+                Debug.isShowBannerInfo
             ? SafeArea(
                 child:
                     SizedBox(height: 85, child: AdWidget(ad: _adController.ad!)))
@@ -50,6 +61,21 @@ class _InfoScreenState extends State<InfoScreen> {
             },
             child: Icon(Icons.arrow_back, color: Colors.black, size: 25),
           ),
+          actions: [
+            InkWell(
+              splashColor: CColor.transparent,
+              highlightColor: CColor.transparent,
+              onTap: () {
+                ipData.value = IPDetails.fromJson({});
+                Repo.getIPDetails(ipData: ipData);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10
+                ),
+                child: Icon(CupertinoIcons.refresh, color: Colors.black, size: 25),
+              ),
+            ),
+          ],
           title: Text('Network Test Screen',
               style: TextStyle(
                   fontSize: 20,
@@ -57,16 +83,16 @@ class _InfoScreenState extends State<InfoScreen> {
                   color: CColor.black,
                   fontWeight: FontWeight.w500)),
         ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10, right: 10),
-          child: FloatingActionButton(
-              onPressed: () {
-                ipData.value = IPDetails.fromJson({});
-                Repo.getIPDetails(ipData: ipData);
-              },
-              backgroundColor: Colors.blue,
-              child: Icon(CupertinoIcons.refresh, color: Colors.white)),
-        ),
+        // floatingActionButton: Padding(
+        //   padding: const EdgeInsets.only(bottom: 10, right: 10),
+        //   child: FloatingActionButton(
+        //       onPressed: () {
+        //         ipData.value = IPDetails.fromJson({});
+        //         Repo.getIPDetails(ipData: ipData);
+        //       },
+        //       backgroundColor: Colors.blue,
+        //       child: Icon(CupertinoIcons.refresh, color: Colors.white)),
+        // ),
         body:  ListView(
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.all(15),

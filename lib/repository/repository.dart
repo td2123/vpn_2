@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart';
 import '../models/ip_details.dart';
 import '../models/vpn.dart';
+import '../utils/debugs.dart';
 import '../utils/preference.dart';
 
 class Repo {
@@ -43,6 +44,19 @@ class Repo {
       final data = jsonDecode(res.body);
       log(data.toString());
       ipData.value = IPDetails.fromJson(data);
+    } catch (e) {
+      log('\ngetIPDetailsE: $e');
+    }
+  }
+
+  static Future getAdData() async {
+    try {
+      final res = await get(Uri.parse("https://raw.githubusercontent.com/priyank56/static/main/vpn.json"));
+      final data = jsonDecode(res.body);
+      Debug.printLog("---->>>>  ad data $data");
+      if(data != null) {
+        return data;
+      }
     } catch (e) {
       log('\ngetIPDetailsE: $e');
     }

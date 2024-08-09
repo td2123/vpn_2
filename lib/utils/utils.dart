@@ -64,7 +64,7 @@ class Utils {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(20),
+              // borderRadius: BorderRadius.circular(20),
             ),
             padding: const EdgeInsets.all(35),
             height: Get.height,

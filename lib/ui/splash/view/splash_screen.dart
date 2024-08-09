@@ -6,7 +6,7 @@ import '../../../utils/color.dart';
 import '../controller/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
-   const SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -17,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    super.initState();
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         splashController.netShow = true;
@@ -33,32 +32,30 @@ class _SplashScreenState extends State<SplashScreen> {
         splashController.textShow = true;
       });
     });
-    Future.delayed(const Duration(milliseconds:2700), () {
+    Future.delayed(const Duration(milliseconds: 2700), () {
       setState(() {
-        splashController. lightShow = true;
+        splashController.lightShow = true;
       });
-    }).then((v){
+    }).then((v) {
       Get.offNamed(AppRoutes.home);
     });
+    super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
         value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: CColor.white,
+            systemNavigationBarColor: CColor.white,
             statusBarIconBrightness: Brightness.light,
             systemNavigationBarIconBrightness: Brightness.light),
         child: Scaffold(
           backgroundColor: CColor.white,
           body: GetBuilder<SplashController>(builder: (logic) {
             return Stack(
-              children: [
-              ],
+              children: [],
             );
           }),
-        )
-    );
+        ));
   }
 }

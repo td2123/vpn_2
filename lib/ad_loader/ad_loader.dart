@@ -34,16 +34,6 @@ class AdLoader {
           onDismissed.call();
         });
       } else {
-        if (!isLoader && Constant.interGoogleAd == null) {
-          // if (!Constant.isAdGoogleLoader) {
-          // try {
-          //   Utils.showLoader(Get.context!);
-          // } catch (e) {
-          //   Debug.printLog(e.toString());
-          //   Get.back();
-          // }
-          // }
-        }
         if (!isAdLoading) {
           isAdLoading = true;
           InterstitialAd.load(
@@ -52,24 +42,7 @@ class AdLoader {
             adLoadCallback: InterstitialAdLoadCallback(
               onAdLoaded: (ad) {
                 isAdLoading = false;
-                // if (!Constant.isAdGoogleLoader) {
-                //   // Get.back();
-                //   // ad.show();
-                // }
-                // onAdLoad.call();
                 Constant.interGoogleAd = ad;
-                // ad.fullScreenContentCallback = FullScreenContentCallback(
-                //   onAdDismissedFullScreenContent: (ad) {
-                //     Constant.interGoogleAd?.dispose();
-                //     Constant.interGoogleAd = null;
-                //     Constant.isAdGoogleLoader = true;
-                //     isAdLoading = false;
-                //     isLoader = true;
-                //     index++;
-                //     AdLoader.interAdGoogle(() {}, () {}, () {});
-                //     onDismissed.call(ad);
-                //   },
-                // );
               },
               onAdFailedToLoad: (err) {
                 Constant.isAdGoogleLoader = true;
@@ -82,7 +55,6 @@ class AdLoader {
             ),
           );
         } else {
-          // Get.back();
           onAdLoad.call();
         }
       }
@@ -110,17 +82,6 @@ class AdLoader {
           onDismissed.call(ad);
         });
       } else {
-        if (!isLoader && Constant.interGoogleAdxAd == null) {
-          // if (!Constant.isAdxAdLoader) {
-          //   try {
-          //     Utils.showLoader(Get.context!);
-          //   } catch (e) {
-          //     Debug.printLog(e.toString());
-          //     Get.back();
-          //   }
-          // }
-        }
-
         if (!isAdLoading) {
           isAdLoading = true;
           InterstitialAd.load(
@@ -129,24 +90,7 @@ class AdLoader {
             adLoadCallback: InterstitialAdLoadCallback(
               onAdLoaded: (ad) {
                 isAdLoading = false;
-                // if (!Constant.isAdxAdLoader) {
-                //   Get.back();
-                //   ad.show();
-                // }
-                // onAdLoad.call();
                 Constant.interGoogleAdxAd = ad;
-                // ad.fullScreenContentCallback = FullScreenContentCallback(
-                //   onAdDismissedFullScreenContent: (ad) {
-                //     Constant.interGoogleAdxAd?.dispose();
-                //     Constant.interGoogleAdxAd = null;
-                //     Constant.isAdxAdLoader = true;
-                //     isLoader = true;
-                //     isAdLoading = false;
-                //     index++;
-                //     AdLoader.interAdGoogleAdx(() {}, () {}, () {});
-                //     onDismissed.call(ad);
-                //   },
-                // );
               },
               onAdFailedToLoad: (err) {
                 Constant.isAdxAdLoader = true;
@@ -165,16 +109,6 @@ class AdLoader {
 
   static interAdFacebook(
       Function onDismissed, Function onFailed, Function onAdLoad) {
-    if (!isLoader) {
-      if (!Constant.isFacebookAdLoader) {
-        try {
-          Utils.showLoader(Get.context!);
-        } catch (e) {
-          Debug.printLog(e.toString());
-          Get.back();
-        }
-      }
-    }
     if (Constant.isFacebookAdLoader) {
       Utils.showLoader(Get.context!);
       Future.delayed(const Duration(milliseconds: 250), () async {
@@ -199,8 +133,7 @@ class AdLoader {
           if (result == InterstitialAdResult.DISMISSED) {
             onDismissed.call();
             index++;
-            Constant.isFacebookAdLoader = true;
-
+            Constant.isFacebookAdLoader = false;
             interAdFacebook(() {}, () {}, () {});
           }
         },
@@ -210,12 +143,7 @@ class AdLoader {
         placementId: AdHelper.interstitialAdUnitIdFacebook,
         listener: (result, value) {
           if (result == InterstitialAdResult.LOADED) {
-            // if (!Constant.isFacebookAdLoader) {
-            //   Get.back();
-
-            // FacebookInterstitialAd.showInterstitialAd();
-            // }
-            // onAdLoad.call();
+            Constant.isFacebookAdLoader = true;
           }
           if (result == InterstitialAdResult.ERROR) {
             Constant.isFacebookAdLoader = true;

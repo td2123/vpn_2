@@ -12,8 +12,12 @@ import 'package:vpn_basic_project/ui/country/controller/country_controller.dart'
 import 'package:vpn_basic_project/utils/color.dart';
 import 'package:vpn_basic_project/utils/font.dart';
 
+import '../../../ad/ad_helper/ad_helper.dart';
 import '../../../ad/native_ad_controller.dart';
+import '../../../ad_loader/ad_loader_mediation.dart';
+import '../../../utils/debugs.dart';
 import '../../../utils/preference.dart';
+import '../../../utils/utils.dart';
 import '../../../vpn_service/vpn_service_engine.dart';
 import '../../home/controller/home_controller.dart';
 
@@ -26,23 +30,34 @@ class CountryScreen extends StatefulWidget {
 
 final _controller = Get.put(CountryController());
 final homeController = Get.find<HomeController>();
-final _adController = NativeAdController();
 
 class _CountryScreenState extends State<CountryScreen> {
+  final _adController = NativeAdController();
+
+  @override
+  void initState() {
+    if (Debug.isShowAd && Debug.isShowBanner && Debug.isShowBannerCountry) {
+      _adController.ad = Ads.loadNativeAd(adController: _adController);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_controller.vpnList.isEmpty) _controller.getVpnData();
-    _adController.ad = Ads.loadNativeAd(adController: _adController);
 
     return Obx(
       () => Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar:
-              _adController.ad != null && _adController.adLoaded.isTrue
-                  ? SafeArea(
-                      child: SizedBox(
-                          height: 85, child: AdWidget(ad: _adController.ad!)))
-                  : null,
+          bottomNavigationBar: _adController.ad != null &&
+                  _adController.adLoaded.isTrue &&
+                  Debug.isShowAd &&
+                  Debug.isShowBanner &&
+                  Debug.isShowBannerCountry
+              ? SafeArea(
+                  child: SizedBox(
+                      height: 85, child: AdWidget(ad: _adController.ad!)))
+              : null,
           appBar: AppBar(
             backgroundColor: Colors.white,
             centerTitle: true,
@@ -106,12 +121,38 @@ class _CountryScreenState extends State<CountryScreen> {
             homeController.vpn.value = vpnItem;
             Pref.vpn = vpnItem;
             Get.back();
-            if (homeController.vpnState.value == VpnEngine.vpnConnected) {
-              VpnEngine.stopVpn();
-              Future.delayed(
-                  Duration(seconds: 2), () => homeController.connectToVpn());
+            if (Debug.isShowAd &&
+                Debug.isShowInter &&
+                Debug.isInterSelectCountry) {
+              if (Debug.isPreloading) {
+                AdLoaderMediation.interMediation(() async {
+                  if (homeController.vpnState.value == VpnEngine.vpnConnected) {
+                    VpnEngine.stopVpn();
+                    Future.delayed(Duration(seconds: 2),
+                        () => homeController.connectToVpn());
+                  } else {
+                    homeController.connectToVpn();
+                  }
+                });
+              } else {
+                _loadInter(() async {
+                  if (homeController.vpnState.value == VpnEngine.vpnConnected) {
+                    VpnEngine.stopVpn();
+                    Future.delayed(Duration(seconds: 2),
+                        () => homeController.connectToVpn());
+                  } else {
+                    homeController.connectToVpn();
+                  }
+                });
+              }
             } else {
-              homeController.connectToVpn();
+              if (homeController.vpnState.value == VpnEngine.vpnConnected) {
+                VpnEngine.stopVpn();
+                Future.delayed(
+                    Duration(seconds: 2), () => homeController.connectToVpn());
+              } else {
+                homeController.connectToVpn();
+              }
             }
           },
           borderRadius: BorderRadius.circular(15),
@@ -199,6 +240,34 @@ class _CountryScreenState extends State<CountryScreen> {
         'VPNs Not Found!',
         style: TextStyle(
             fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  _loadInter(Function onDismissed) {
+    try {
+      Utils.showLoader(Get.context!);
+    } catch (e) {
+      Debug.printLog(e.toString());
+      Get.back();
+    }
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) async {
+          await Future.delayed(Duration(milliseconds: 500));
+          Get.back();
+          ad.show();
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              onDismissed.call();
+            },
+          );
+        },
+        onAdFailedToLoad: (err) {
+          Debug.printLog(":::::::::: google ad fail :::::::::: $err");
+        },
       ),
     );
   }

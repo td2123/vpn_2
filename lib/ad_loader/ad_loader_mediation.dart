@@ -10,7 +10,7 @@ class AdLoaderMediation {
           AdLoader.interAdGoogle(() {}, () {
             AdLoader.interAdFacebook(() {}, () {
               Get.back();
-             
+
               onLoad.call();
             }, () {
               onLoad.call();
@@ -26,7 +26,7 @@ class AdLoaderMediation {
           AdLoader.interAdGoogleAdx(() {}, () {
             AdLoader.interAdFacebook(() {}, () {
               Get.back();
-             
+
               onLoad.call();
             }, () {
               onLoad.call();
@@ -47,7 +47,7 @@ class AdLoaderMediation {
         } else {
           AdLoader.interAdGoogle(() {}, () {
             // Get.back();
-           
+
             onLoad.call();
           }, () {
             onLoad.call();
