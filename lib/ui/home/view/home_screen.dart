@@ -1,3 +1,4 @@
+import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,16 +42,20 @@ class _HomeScreenState extends State<HomeScreen> {
             statusBarColor: CColor.white12,
             systemNavigationBarIconBrightness: Brightness.dark),
       ),
-      body: GetBuilder<HomeController>(builder: (logic) {
-        return _mapView(logic, context);
-      }),
+      body: WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: GetBuilder<HomeController>(builder: (logic) {
+          return _mapView(logic, context);
+        }),
+      ),
     );
   }
 
   _header(BuildContext context) {
     return Container(
       height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 20),
       alignment: Alignment.center,
       width: Get.width,
       child: Row(
@@ -60,8 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 _scaffoldKey.currentState?.openDrawer();
               },
-              child:
-                  SvgPicture.asset("assets/icons/drawer_menu.svg", height: 45)),
+              child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: SvgPicture.asset("assets/icons/drawer_menu.svg",
+                      height: 45))),
           Text(
             "VPN",
             style: TextStyle(
@@ -71,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               Get.toNamed(AppRoutes.info);
             },
-            child: SvgPicture.asset("assets/icons/info.svg", height: 40),
+            child: Container(
+                margin: EdgeInsets.all(10),
+                child: SvgPicture.asset("assets/icons/info.svg", height: 40)),
           ),
         ],
       ),
@@ -93,7 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 120),
                 Align(
                     alignment: Alignment.center,
-                    child: Image.asset("assets/icons/vpn_logo.png", height: 100)),
+                    child:
+                        Image.asset("assets/icons/vpn_logo.png", height: 100)),
                 SizedBox(height: 90),
                 Divider(
                   thickness: 1,
@@ -112,7 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w500)),
                   onTap: () {
                     Navigator.pop(context);
-                    Get.toNamed(AppRoutes.webview, arguments: [Debug.termsCondition]);
+                    Get.toNamed(AppRoutes.webview,
+                        arguments: [Debug.termsCondition]);
                   },
                 ),
                 SizedBox(height: 5),
@@ -126,7 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w500)),
                   onTap: () {
                     Navigator.pop(context);
-                    Get.toNamed(AppRoutes.webview, arguments: [Debug.privacyPolicy]);
+                    Get.toNamed(AppRoutes.webview,
+                        arguments: [Debug.privacyPolicy]);
                   },
                 ),
                 SizedBox(height: 5),
@@ -337,11 +349,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Obx(
       () => Semantics(
         button: true,
-        child: InkWell(
+        child: Bounce(
           onTap: () {
             logic.connectToVpn();
           },
-          borderRadius: BorderRadius.circular(100),
+          duration: Duration.zero,
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(

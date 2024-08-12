@@ -1,20 +1,18 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:lottie/lottie.dart';
 import 'package:vpn_basic_project/ad/ads.dart';
 import 'package:vpn_basic_project/models/vpn.dart';
 import 'package:vpn_basic_project/ui/country/controller/country_controller.dart';
 import 'package:vpn_basic_project/utils/color.dart';
 import 'package:vpn_basic_project/utils/font.dart';
-
 import '../../../ad/ad_helper/ad_helper.dart';
 import '../../../ad/native_ad_controller.dart';
 import '../../../ad_loader/ad_loader_mediation.dart';
+import '../../../utils/constant.dart';
 import '../../../utils/debugs.dart';
 import '../../../utils/preference.dart';
 import '../../../utils/utils.dart';
@@ -36,6 +34,7 @@ class _CountryScreenState extends State<CountryScreen> {
 
   @override
   void initState() {
+    if (Constant.vpnList.isEmpty) _controller.getVpnData();
     if (Debug.isShowAd && Debug.isShowBanner && Debug.isShowBannerCountry) {
       _adController.ad = Ads.loadNativeAd(adController: _adController);
     }
@@ -44,8 +43,6 @@ class _CountryScreenState extends State<CountryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_controller.vpnList.isEmpty) _controller.getVpnData();
-
     return Obx(
       () => Scaffold(
           backgroundColor: Colors.white,
@@ -74,9 +71,9 @@ class _CountryScreenState extends State<CountryScreen> {
               },
               child: Icon(Icons.arrow_back, color: Colors.black, size: 25),
             ),
-            title: Text('VPN Locations (${_controller.vpnList.length})',
+            title: Text('VPN Locations (${Constant.vpnList.length})',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 19,
                     fontFamily: Font.nunito,
                     color: CColor.black,
                     fontWeight: FontWeight.w500)),
@@ -90,7 +87,7 @@ class _CountryScreenState extends State<CountryScreen> {
           ),
           body: _controller.isLoading.value
               ? _loadingWidget(_controller)
-              : _controller.vpnList.isEmpty
+              : Constant.vpnList.isEmpty
                   ? _noVPNFound(_controller)
                   : _vpnData(_controller)),
     );
@@ -98,14 +95,14 @@ class _CountryScreenState extends State<CountryScreen> {
 
   _vpnData(CountryController logic) {
     return ListView.builder(
-      itemCount: logic.vpnList.length,
+      itemCount: Constant.vpnList.length,
       padding: EdgeInsets.only(
-          top: Get.height * .015,
-          bottom: Get.height * .1,
-          left: Get.width * .04,
-          right: Get.width * .04),
+          top: Get.height * 0.015,
+          bottom: Get.height * 0.1,
+          left: Get.width * 0.04,
+          right: Get.width * 0.04),
       itemBuilder: (ctx, i) => _item(
-        logic.vpnList[i],
+        Constant.vpnList[i],
       ),
     );
   }
@@ -120,6 +117,7 @@ class _CountryScreenState extends State<CountryScreen> {
           onTap: () {
             homeController.vpn.value = vpnItem;
             Pref.vpn = vpnItem;
+            Get.closeAllSnackbars();
             Get.back();
             if (Debug.isShowAd &&
                 Debug.isShowInter &&
@@ -214,22 +212,14 @@ class _CountryScreenState extends State<CountryScreen> {
   }
 
   _loadingWidget(CountryController logic) {
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          LottieBuilder.asset('assets/lottie/loading.json',
-              width: Get.width * 0.7),
-          Text(
-            'Loading VPNs...',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.black54,
-                fontWeight: FontWeight.bold),
-          )
-        ],
+    return Center(
+      child: SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(
+          color:  CColor.black,
+          strokeWidth: 2,
+        ),
       ),
     );
   }

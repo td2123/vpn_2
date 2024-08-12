@@ -78,7 +78,7 @@ class _InfoScreenState extends State<InfoScreen> {
           ],
           title: Text('Network Test Screen',
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 19,
                   fontFamily: Font.nunito,
                   color: CColor.black,
                   fontWeight: FontWeight.w500)),

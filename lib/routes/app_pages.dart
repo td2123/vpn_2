@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:vpn_basic_project/routes/app_routes.dart';
+import 'package:vpn_basic_project/slider/bindings/slider_binding.dart';
+import 'package:vpn_basic_project/slider/view/slider_screen.dart';
 import 'package:vpn_basic_project/ui/country/binding/country_binding.dart';
 import 'package:vpn_basic_project/ui/country/view/country_screen.dart';
 import 'package:vpn_basic_project/ui/info/binding/info_binding.dart';
@@ -58,6 +60,15 @@ class AppPages {
         },
       ),
       binding: WebViewBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.slider,
+      page: () => Sizer(
+        builder: (context, orientation, deviceType) {
+          return SliderScreen();
+        },
+      ),
+      binding: SliderBinding(),
     ),
   ];
 }

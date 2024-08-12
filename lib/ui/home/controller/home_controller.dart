@@ -23,6 +23,7 @@ class HomeController extends GetxController {
 
   void connectToVpn() async {
     if (vpn.value.openVPNConfigDataBase64.isEmpty) {
+      Get.closeAllSnackbars();
       Get.snackbar(
           'Info', 'Select a Location by clicking \'Select Country Server\'',
           colorText: Colors.black,
@@ -31,36 +32,44 @@ class HomeController extends GetxController {
       return;
     }
 
-    if (vpnState.value == VpnEngine.vpnDisconnected) {
       if (Debug.isShowAd && Debug.isShowInter && Debug.isInterConnectVPN) {
         if (Debug.isPreloading) {
           AdLoaderMediation.interMediation(() async {
-            final data = const Base64Decoder()
-                .convert(vpn.value.openVPNConfigDataBase64);
-            final config = const Utf8Decoder().convert(data);
-            final vpnConfig = VpnConfig(
-                country: vpn.value.countryLong,
-                username: 'vpn',
-                password: 'vpn',
-                config: config);
+            if (vpnState.value == VpnEngine.vpnDisconnected) {
+              final data = const Base64Decoder()
+                  .convert(vpn.value.openVPNConfigDataBase64);
+              final config = const Utf8Decoder().convert(data);
+              final vpnConfig = VpnConfig(
+                  country: vpn.value.countryLong,
+                  username: 'vpn',
+                  password: 'vpn',
+                  config: config);
 
-            await VpnEngine.startVpn(vpnConfig);
+              await VpnEngine.startVpn(vpnConfig);
+            }else {
+              await VpnEngine.stopVpn();
+            }
           });
         } else {
           _loadInter(() async {
-            final data = const Base64Decoder()
-                .convert(vpn.value.openVPNConfigDataBase64);
-            final config = const Utf8Decoder().convert(data);
-            final vpnConfig = VpnConfig(
-                country: vpn.value.countryLong,
-                username: 'vpn',
-                password: 'vpn',
-                config: config);
+            if (vpnState.value == VpnEngine.vpnDisconnected) {
+              final data = const Base64Decoder()
+                  .convert(vpn.value.openVPNConfigDataBase64);
+              final config = const Utf8Decoder().convert(data);
+              final vpnConfig = VpnConfig(
+                  country: vpn.value.countryLong,
+                  username: 'vpn',
+                  password: 'vpn',
+                  config: config);
 
-            await VpnEngine.startVpn(vpnConfig);
+              await VpnEngine.startVpn(vpnConfig);
+            }else {
+              await VpnEngine.stopVpn();
+            }
           });
         }
       } else {
+        if (vpnState.value == VpnEngine.vpnDisconnected) {
         final data =
             const Base64Decoder().convert(vpn.value.openVPNConfigDataBase64);
         final config = const Utf8Decoder().convert(data);
@@ -71,10 +80,10 @@ class HomeController extends GetxController {
             config: config);
 
         await VpnEngine.startVpn(vpnConfig);
+        }else {
+          await VpnEngine.stopVpn();
+        }
       }
-    } else {
-      await VpnEngine.stopVpn();
-    }
     update();
   }
 

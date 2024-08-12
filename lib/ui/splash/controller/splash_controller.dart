@@ -242,4 +242,15 @@ class SplashController extends GetxController {
       Debug.printLog("------>>>> hello get data error $e");
     }
   }
+
+  Future<void> getVpnData() async {
+    Constant.vpnList.clear();
+    Constant.vpnList = await Repo.getVPNServers();
+    for (int a = 0; a < Constant.vpnList.length; a++) {
+      var emptySession = Constant.vpnList[a].numVpnSessions;
+      if (emptySession == 0) {
+        Constant.vpnList.removeAt(a);
+      }
+    }}
+
 }

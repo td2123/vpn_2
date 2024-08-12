@@ -17,27 +17,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        splashController.netShow = true;
-      });
-    });
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      setState(() {
-        splashController.showIcon = true;
-      });
-    });
+    splashController.getVpnData();
     Future.delayed(const Duration(milliseconds: 2500), () {
-      setState(() {
-        splashController.textShow = true;
-      });
-    });
-    Future.delayed(const Duration(milliseconds: 2700), () {
       setState(() {
         splashController.lightShow = true;
       });
     }).then((v) {
-      Get.offNamed(AppRoutes.home);
+      Get.offNamed(AppRoutes.slider);
     });
     super.initState();
   }
@@ -47,13 +33,36 @@ class _SplashScreenState extends State<SplashScreen> {
     return AnnotatedRegion(
         value: const SystemUiOverlayStyle(
             systemNavigationBarColor: CColor.white,
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarIconBrightness: Brightness.light),
+            statusBarColor: CColor.white,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarIconBrightness: Brightness.dark),
         child: Scaffold(
           backgroundColor: CColor.white,
           body: GetBuilder<SplashController>(builder: (logic) {
-            return Stack(
-              children: [],
+            return Center(
+              child: Container(
+                height: 120,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                        color: CColor.black12.withOpacity(0.1),
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3,
+                        spreadRadius: 0.5),
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.1),
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 3,
+                      spreadRadius: 0.5,
+                    )
+                  ],
+                  image: DecorationImage(
+                      image: AssetImage("assets/icons/vpn_logo.jpg")),
+                ),
+                // child: Image.asset("assets/icons/vpn_logo.jpg", height: 120),
+              ),
             );
           }),
         ));

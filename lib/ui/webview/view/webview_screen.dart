@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../utils/color.dart';
@@ -34,7 +33,7 @@ class WebViewScreen extends StatelessWidget {
                 _header(logic),
                 Expanded(
                   child: WebViewWidget(
-                    controller: webViewController.controller,
+                    controller: logic.controller,
                   ),
                 )
               ],
